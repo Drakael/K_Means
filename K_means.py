@@ -4,15 +4,23 @@ import matplotlib.pyplot as plt
 
 
 class K_Means:
-    def __init__(self, vector_list, C, iterations=100):
+    def __init__(self, vector_list, C, iterations=20):
         self.vector_list = vector_list
         self.vec_dim = len(vector_list[0])
         self.C = C
         self.iterations = iterations
         self.centroids = list()
-        min_ = np.min(vector_list)
-        max_ = np.max(vector_list)
-        self.centroids = np.random.uniform(min_, max_, (C, self.vec_dim))
+        # min_ = np.min(vector_list)
+        # max_ = np.max(vector_list)
+        # self.centroids = np.random.uniform(min_, max_, (C, self.vec_dim))
+        self.centroids = np.zeros((C, self.vec_dim))
+        used_ids = set()
+        for i in range(C):
+            rand_id = np.random.randint(len(self.vector_list))
+            while rand_id in used_ids:
+                rand_id = np.random.randint(len(self.vector_list))
+            used_ids.add(rand_id)
+            self.centroids[i, :] = self.vector_list[rand_id]
         print('centroids', self.centroids)
         self.elem2cluster = list()
         self.cost = None
@@ -57,8 +65,9 @@ class K_Means:
             #     plt.show()
 
 if __name__ == '__main__':
-    data = np.random.uniform(0, 10, (130, 2))
-    kmean = K_Means(data, 5, 300)
+    np.random.seed(3)
+    data = np.random.uniform(0, 10, (150, 2))
+    kmean = K_Means(data, 5, 20)
     kmean.iterate()
     print('data', data)
     print('kmean.centroids', kmean.centroids)
