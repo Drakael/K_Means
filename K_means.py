@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.spatial.distance import cityblock, euclidean
+from scipy.spatial.distance import euclidean
 import matplotlib.pyplot as plt
 
 
@@ -66,6 +66,7 @@ if __name__ == '__main__':
     colors = ['g', 'b', 'c', 'm', 'y']
     color_list = [colors[cluster] for cluster in kmean.elem2cluster]
     plt.figure()
-    plt.scatter(kmean.centroids[:, 0], kmean.centroids[:, 1], color='r', marker='x')
+    plt.scatter(kmean.centroids[:, 0], kmean.centroids[:, 1],
+                color='r', marker='x')
     plt.scatter(data[:, 0], data[:, 1], color=color_list)
     plt.show()
