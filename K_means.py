@@ -20,7 +20,7 @@ class K_Means:
             while rand_id in used_ids:
                 rand_id = np.random.randint(len(self.vector_list))
             used_ids.add(rand_id)
-            self.centroids[i, :] = self.vector_list[rand_id]
+            self.centroids[i, :] = self.vector_list[rand_id, :]
         print('centroids', self.centroids)
         self.elem2cluster = list()
         self.cost = None
@@ -54,15 +54,24 @@ class K_Means:
 
     def iterate(self):
         self.__associate_to_clusters()
-        for i in range(self.iterations):
-            print('iterations', i, 'cost', np.sum(self.cost))
-            self.__update_centroids()
-            self.__associate_to_clusters()
-            #     colors = ['r', 'g', 'b']
-            #     color_list = [colors[cluster] for cluster in self.elem2cluster]
-            #     plt.figure()
-            #     plt.scatter(self.vector_list[:, 0], self.vector_list[:, 1], color=color_list)
-            #     plt.show()
+        if type(self.iterations) is int and self.iterations > 0:
+            for i in range(self.iterations):
+                print('iterations', i, 'cost', np.sum(self.cost))
+                self.__update_centroids()
+                self.__associate_to_clusters()
+        elif self.iterations is None:
+            last_cost_diff = 1000
+            last_cost = None
+            i = 0
+            while last_cost_diff > 0.001:
+                cost = np.sum(self.cost)
+                print('iterations', i, 'cost', cost)
+                self.__update_centroids()
+                self.__associate_to_clusters()
+                if last_cost is not None:
+                    last_cost_diff = last_cost - cost
+                last_cost = cost
+                i += 1
 
 if __name__ == '__main__':
     np.random.seed(3)
